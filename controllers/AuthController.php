@@ -48,6 +48,7 @@ class AuthController
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $userModel->create($username, $email, $hashedPassword, $role);
             $success = "Registration successful! Please login.";
+            $error = ""; // Clear any previous errors
             include __DIR__ . '/../views/login.php';
         } else {
             include __DIR__ . '/../views/signup.php';

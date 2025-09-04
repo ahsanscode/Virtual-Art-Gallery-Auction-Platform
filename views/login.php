@@ -89,6 +89,7 @@
     <body>
     <div class="login-container">
         <h2>Login</h2>
+        <?php if (!empty($success)) echo "<div style='color: #27ae60; background: #eafaf1; border: 1px solid #b4d6cd; padding: 10px 12px; border-radius: 7px; text-align: center; margin-bottom: 18px;'>$success</div>"; ?>
         <?php if (!empty($error)) echo "<div class='error-message'>$error</div>"; ?>
         <form method="post" action="">
             <input type="email" name="email" placeholder="Email address" required>
