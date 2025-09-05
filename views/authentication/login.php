@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include 'views\header.php'; ?>
 
 <style>
     .main-content {
@@ -130,4 +130,4 @@
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'views/footer.php'; ?>
