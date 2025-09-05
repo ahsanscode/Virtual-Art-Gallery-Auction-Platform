@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../../models/user/User.php';
 
 class AuthController
 {
@@ -23,10 +23,10 @@ class AuthController
                 exit;
             } else {
                 $error = "Invalid email or password.";
-                include __DIR__ . '/../views/login.php';
+                include __DIR__ . '/../../views/authentication/login.php';
             }
         } else {
-            include __DIR__ . '/../views/login.php';
+            include __DIR__ . '/../../views/authentication/login.php';
         }
     }
 
@@ -43,14 +43,14 @@ class AuthController
             // Check if name already exists (names must be unique across all roles)
             if ($userModel->findByName($name)) {
                 $error = "Name already exists. Please choose a different name.";
-                include __DIR__ . '/../views/signup.php';
+                include __DIR__ . '/../../views/authentication/signup.php';
                 return;
             }
             
             // Check if email already exists with the same role
             if ($userModel->findByEmailAndRole($email, $role)) {
                 $error = "An account with this email already exists for the selected role.";
-                include __DIR__ . '/../views/signup.php';
+                include __DIR__ . '/../../views/authentication/signup.php';
                 return;
             }
 
@@ -58,13 +58,13 @@ class AuthController
             if ($userModel->create($name, $email, $hashedPassword, $role)) {
                 $success = "Registration successful! Please login.";
                 $error = ""; // Clear any previous errors
-                include __DIR__ . '/../views/login.php';
+                include __DIR__ . '/../../views/authentication/login.php';
             } else {
                 $error = "Registration failed. Please try again.";
-                include __DIR__ . '/../views/signup.php';
+                include __DIR__ . '/../../views/authentication/signup.php';
             }
         } else {
-            include __DIR__ . '/../views/signup.php';
+            include __DIR__ . '/../../views/authentication/signup.php';
         }
     }
 
