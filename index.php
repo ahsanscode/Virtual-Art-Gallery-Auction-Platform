@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// Use mock authentication for demonstration
-require_once __DIR__ . '/controllers/MockAuthController.php';
+// Use proper authentication controller
+require_once __DIR__ . '/controllers/AuthController.php';
 
 $action = $_GET['action'] ?? null;
-$auth = new MockAuthController();
+$auth = new AuthController();
 
 if ($action === 'logout') {
     $auth->logout();

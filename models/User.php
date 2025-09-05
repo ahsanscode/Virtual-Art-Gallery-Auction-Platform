@@ -18,18 +18,18 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function findByUsername($username) {
-        $query = "SELECT * FROM " . $this->table . " WHERE username = :username LIMIT 1";
+    public function findByName($name) {
+        $query = "SELECT * FROM " . $this->table . " WHERE name = :name LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":name", $name);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($username, $email, $password, $role = "buyer") {
-        $query = "INSERT INTO " . $this->table . " (username, email, password, role) VALUES (:username, :email, :password, :role)";
+    public function create($name, $email, $password, $role = "buyer") {
+        $query = "INSERT INTO " . $this->table . " (name, email, password, role) VALUES (:name, :email, :password, :role)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":name", $name);
         $stmt->bindParam(":email", $email);
         $stmt->bindParam(":password", $password);
         $stmt->bindParam(":role", $role);
