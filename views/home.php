@@ -130,6 +130,17 @@
         color: #333;
     }
     
+    .success-message {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin: 2rem auto;
+        max-width: 600px;
+    }
+    
     .section-subtitle {
         text-align: center;
         font-size: 1.2rem;
@@ -155,6 +166,15 @@
 </style>
 
 <div class="main-content">
+    <?php if (isset($_SESSION['delete_success'])): ?>
+        <div class="success-message">
+            <?php 
+            echo htmlspecialchars($_SESSION['delete_success']); 
+            unset($_SESSION['delete_success']);
+            ?>
+        </div>
+    <?php endif; ?>
+    
     <section class="hero-section">
         <div class="hero-content">
             <h1>Discover Extraordinary Art</h1>
