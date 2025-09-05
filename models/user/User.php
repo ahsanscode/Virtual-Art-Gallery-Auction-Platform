@@ -44,5 +44,60 @@ class User {
         $stmt->bindParam(":role", $role);
         return $stmt->execute();
     }
+
+    public function findById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateProfile($id, $name, $email) {
+        $query = "UPDATE " . $this->table . " SET name = :name, email = :email WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->bindParam(":name", $name);
+        $stmt->bindParam(":email", $email);
+        return $stmt->execute();
+    }
+
+    public function updateRole($id, $role) {
+        $query = "UPDATE " . $this->table . " SET role = :role WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->bindParam(":role", $role);
+        return $stmt->execute();
+    }
+
+    public function checkEmailExists($email, $excludeId = null) {
+        if ($excludeId) {
+            $query = "SELECT * FROM " . $this->table . " WHERE email = :email AND id != :excludeId LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":email", $email);
+            $stmt->bindParam(":excludeId", $excludeId);
+        } else {
+            $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":email", $email);
+        }
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function checkNameExists($name, $excludeId = null) {
+        if ($excludeId) {
+            $query = "SELECT * FROM " . $this->table . " WHERE name = :name AND id != :excludeId LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":name", $name);
+            $stmt->bindParam(":excludeId", $excludeId);
+        } else {
+            $query = "SELECT * FROM " . $this->table . " WHERE name = :name LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":name", $name);
+        }
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>

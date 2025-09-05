@@ -114,6 +114,7 @@
                         <li><a href="index.php?action=auctions">Auctions</a></li>
                         <li><a href="index.php?action=favorites">Favorites</a></li>
                     <?php endif; ?>
+                    <li><a href="index.php?action=profile">Profile</a></li>
                     <li class="user-info">
                         <span>Welcome, <?php echo htmlspecialchars($_SESSION['user']['username']); ?></span>
                         <span class="user-role"><?php echo ucfirst($_SESSION['user']['role']); ?></span>
