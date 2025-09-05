@@ -2,10 +2,12 @@
 session_start();
 
 // Use proper authentication controller
-require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/authentication/AuthController.php';
+require_once __DIR__ . '/controllers/ProfileController.php';
 
 $action = $_GET['action'] ?? null;
 $auth = new AuthController();
+$profile = new ProfileController();
 
 if ($action === 'logout') {
     $auth->logout();
@@ -38,6 +40,14 @@ if (!isset($_SESSION['user'])) {
 $userRole = $_SESSION['user']['role'];
 
 switch ($action) {
+    case 'profile':
+        $profile->showProfile();
+        break;
+        
+    case 'update-profile':
+        $profile->updateProfile();
+        break;
+        
     case 'my-artworks':
     case 'add-artwork':
     case 'sales-report':
