@@ -53,14 +53,6 @@ class ProfileController
                 return;
             }
 
-            // Check if name already exists for another user
-            if ($userModel->checkNameExists($name, $userId)) {
-                $error = "Name already exists. Please choose a different name.";
-                $user = $userModel->findById($userId);
-                include __DIR__ . '/../views/profile.php';
-                return;
-            }
-
             // Check if email already exists for another user
             if ($userModel->checkEmailExists($email, $userId)) {
                 $error = "Email already exists. Please choose a different email.";
