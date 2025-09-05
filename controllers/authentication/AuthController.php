@@ -40,16 +40,9 @@ class AuthController
 
             $userModel = new User();
             
-            // Check if name already exists (names must be unique across all roles)
-            if ($userModel->findByName($name)) {
-                $error = "Name already exists. Please choose a different name.";
-                include __DIR__ . '/../../views/authentication/signup.php';
-                return;
-            }
-            
-            // Check if email already exists with the same role
-            if ($userModel->findByEmailAndRole($email, $role)) {
-                $error = "An account with this email already exists for the selected role.";
+            // Check if email already exists (emails must be unique)
+            if ($userModel->findByEmail($email)) {
+                $error = "An account with this email already exists. Please choose a different email.";
                 include __DIR__ . '/../../views/authentication/signup.php';
                 return;
             }
