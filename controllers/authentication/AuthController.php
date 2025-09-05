@@ -47,9 +47,9 @@ class AuthController
                 return;
             }
             
-            // Check if email already exists with the same role
-            if ($userModel->findByEmailAndRole($email, $role)) {
-                $error = "An account with this email already exists for the selected role.";
+            // Check if email already exists (emails must be unique across all roles)
+            if ($userModel->findByEmail($email)) {
+                $error = "An account with this email already exists.";
                 include __DIR__ . '/../../views/authentication/signup.php';
                 return;
             }
