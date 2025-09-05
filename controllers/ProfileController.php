@@ -97,5 +97,33 @@ class ProfileController
             $this->showProfile();
         }
     }
+
+    public function deleteProfile()
+    {
+        if (!isset($_SESSION['user'])) {
+            header("Location: index.php?action=login");
+            exit;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $userId = $_SESSION['user']['id'];
+            $userModel = new User();
+            
+            // Perform soft delete
+            if ($userModel->softDelete($userId)) {
+                // Clear session data
+                session_destroy();
+                // Redirect to home page with success message
+                header("Location: index.php?deleted=1");
+                exit;
+            } else {
+                $error = "Failed to delete profile. Please try again.";
+                $user = $userModel->findById($userId);
+                include __DIR__ . '/../views/profile.php';
+            }
+        } else {
+            $this->showProfile();
+        }
+    }
 }
 ?>

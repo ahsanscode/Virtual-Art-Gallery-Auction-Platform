@@ -152,9 +152,25 @@
             align-items: center;
         }
     }
+    
+    .success-banner {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        padding: 1rem;
+        margin: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+    }
 </style>
 
 <div class="main-content">
+    <?php if (isset($_GET['deleted']) && $_GET['deleted'] == '1'): ?>
+        <div class="success-banner">
+            ✅ Your profile has been successfully deleted. Thank you for being part of our community!
+        </div>
+    <?php endif; ?>
     <section class="hero-section">
         <div class="hero-content">
             <h1>Discover Extraordinary Art</h1>

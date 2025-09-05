@@ -156,6 +156,38 @@
         box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
     
+    .btn-delete {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+    
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .button-group .btn-update,
+    .button-group .btn-delete {
+        flex: 1;
+        margin-top: 0;
+    }
+    
     .current-info {
         background: #e7f3ff;
         border: 1px solid #b3d9ff;
@@ -271,6 +303,10 @@
                     </div>
                     
                     <button type="submit" class="btn-update">Update Profile</button>
+                </form>
+                
+                <form method="post" action="index.php?action=delete-profile" onsubmit="return confirm('Are you sure you want to delete your profile? This action cannot be undone!');">
+                    <button type="submit" class="btn-delete">🗑️ Delete Profile</button>
                 </form>
             <?php else: ?>
                 <div class="error-message">Unable to load user information.</div>
