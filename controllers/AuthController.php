@@ -12,10 +12,10 @@ class AuthController
             $userModel = new User();
             $user = $userModel->findByEmail($email);
 
-            if ($user && password_verify($password, $user['password']) && !$user['is_deleted']) {
+            if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = [
                     'id' => $user['id'],
-                    'username' => $user['username'],
+                    'username' => $user['name'], // Display name in header
                     'email' => $user['email'],
                     'role' => $user['role']
                 ];
@@ -33,22 +33,27 @@ class AuthController
     public function signup()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $username = trim($_POST['username']);
+            $name = trim($_POST['name']);
             $email = trim($_POST['email']);
             $password = $_POST['password'];
             $role = $_POST['role'] ?? 'buyer';
 
             $userModel = new User();
-            if ($userModel->findByEmail($email) || $userModel->findByUsername($username)) {
-                $error = "Email or Username already exists.";
+            if ($userModel->findByEmail($email) || $userModel->findByName($name)) {
+                $error = "Email or name already exists.";
                 include __DIR__ . '/../views/signup.php';
                 return;
             }
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $userModel->create($username, $email, $hashedPassword, $role);
-            $success = "Registration successful! Please login.";
-            include __DIR__ . '/../views/login.php';
+            if ($userModel->create($name, $email, $hashedPassword, $role)) {
+                $success = "Registration successful! Please login.";
+                $error = ""; // Clear any previous errors
+                include __DIR__ . '/../views/login.php';
+            } else {
+                $error = "Registration failed. Please try again.";
+                include __DIR__ . '/../views/signup.php';
+            }
         } else {
             include __DIR__ . '/../views/signup.php';
         }

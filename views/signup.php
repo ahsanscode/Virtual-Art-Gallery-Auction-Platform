@@ -1,111 +1,143 @@
 <?php include 'header.php'; ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Sign Up - Virtual Art Gallery</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            body {
-                background: #f6f6f6;
-                font-family: 'Segoe UI', Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
-            .signup-container {
-                max-width: 400px;
-                margin: 70px auto;
-                padding: 36px 30px 28px 30px;
-                background: #fff;
-                border-radius: 14px;
-                box-shadow: 0 8px 30px rgba(60, 60, 90, 0.07);
-            }
-            .signup-container h2 {
-                text-align: center;
-                margin-bottom: 24px;
-                color: #2a2a39;
-            }
-            .signup-container form {
-                display: flex;
-                flex-direction: column;
-            }
-            .signup-container input[type="text"],
-            .signup-container input[type="email"],
-            .signup-container input[type="password"],
-            .signup-container select {
-                padding: 10px;
-                margin-bottom: 18px;
-                border: 1px solid #ccc;
-                border-radius: 7px;
-                background: #fafafa;
-                font-size: 16px;
-                transition: border-color 0.2s;
-            }
-            .signup-container input[type="text"]:focus,
-            .signup-container input[type="email"]:focus,
-            .signup-container input[type="password"]:focus,
-            .signup-container select:focus {
-                border-color: #8e44ad;
-                outline: none;
-            }
-            .signup-container input[type="submit"] {
-                padding: 10px;
-                background: linear-gradient(90deg, #8e44ad 0%, #6c3483 100%);
-                color: #fff;
-                border: none;
-                border-radius: 7px;
-                font-size: 16px;
-                cursor: pointer;
-                transition: background 0.2s;
-            }
-            .signup-container input[type="submit"]:hover {
-                background: linear-gradient(90deg, #6c3483 0%, #8e44ad 100%);
-            }
-            .signup-container p {
-                text-align: center;
-                margin-top: 14px;
-                font-size: 15px;
-            }
-            .signup-container a {
-                color: #8e44ad;
-                text-decoration: none;
-            }
-            .signup-container a:hover {
-                text-decoration: underline;
-            }
-            .error-message {
-                color: #c0392b;
-                background: #ffeaea;
-                border: 1px solid #e0b4b4;
-                padding: 10px 12px;
-                border-radius: 7px;
-                text-align: center;
-                margin-bottom: 18px;
-            }
-            @media (max-width: 480px) {
-                .signup-container {
-                    padding: 18px 6px;
-                    margin: 40px 8px;
-                }
-            }
-        </style>
-    </head>
-    <body>
+
+<style>
+    .main-content {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem 1rem;
+    }
+    
+    .signup-container {
+        max-width: 400px;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    
+    .signup-container h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #333;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+    
+    .signup-container form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .signup-container input[type="text"],
+    .signup-container input[type="email"],
+    .signup-container input[type="password"],
+    .signup-container select {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        background: #f8f9fa;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .signup-container input[type="text"]:focus,
+    .signup-container input[type="email"]:focus,
+    .signup-container input[type="password"]:focus,
+    .signup-container select:focus {
+        border-color: #667eea;
+        outline: none;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .signup-container input[type="submit"] {
+        padding: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .signup-container input[type="submit"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .signup-container p {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: #666;
+    }
+    
+    .signup-container a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .signup-container a:hover {
+        text-decoration: underline;
+    }
+    
+    .error-message {
+        color: #dc3545;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .success-message {
+        color: #155724;
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    @media (max-width: 480px) {
+        .signup-container {
+            padding: 1.5rem 1rem;
+            margin: 0 1rem;
+        }
+        
+        .signup-container h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="main-content">
     <div class="signup-container">
-        <h2>Sign Up</h2>
+        <h2>Join Our Community</h2>
         <?php if (!empty($error)) echo "<div class='error-message'>$error</div>"; ?>
+        <?php if (!empty($success)) echo "<div class='success-message'>$success</div>"; ?>
         <form method="post" action="">
-            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="name" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email address" required>
             <input type="password" name="password" placeholder="Password" required>
-            <select name="role">
+            <select name="role" required>
+                <option value="">Select your role</option>
                 <option value="artist">Artist</option>
                 <option value="buyer">Buyer</option>
             </select>
             <input type="submit" value="Sign Up">
         </form>
-        <p>Already have an account? <a href="index.php?action=login">Login</a></p>
+        <p>Already have an account? <a href="index.php?action=login">Login here</a></p>
     </div>
-    </body>
-    </html>
+</div>
+
 <?php include 'footer.php'; ?>
