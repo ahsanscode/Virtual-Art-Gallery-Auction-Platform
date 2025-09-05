@@ -156,6 +156,37 @@
         box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
     
+    .btn-delete {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+    
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .button-group .btn-update,
+    .button-group .btn-delete {
+        width: 48%;
+        margin-top: 0;
+    }
+    
     .current-info {
         background: #e7f3ff;
         border: 1px solid #b3d9ff;
@@ -270,8 +301,22 @@
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn-update">Update Profile</button>
+                    <div class="button-group">
+                        <button type="submit" class="btn-update">Update Profile</button>
+                        <button type="button" class="btn-delete" onclick="confirmDelete()">Delete Profile</button>
+                    </div>
                 </form>
+                
+                <form id="deleteForm" method="post" action="index.php?action=delete-profile" style="display: none;">
+                </form>
+                
+                <script>
+                function confirmDelete() {
+                    if (confirm('Are you sure you want to delete your profile? This action cannot be undone and will log you out immediately.')) {
+                        document.getElementById('deleteForm').submit();
+                    }
+                }
+                </script>
             <?php else: ?>
                 <div class="error-message">Unable to load user information.</div>
             <?php endif; ?>

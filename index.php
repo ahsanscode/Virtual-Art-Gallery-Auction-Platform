@@ -48,6 +48,10 @@ switch ($action) {
         $profile->updateProfile();
         break;
         
+    case 'delete-profile':
+        $profile->deleteProfile();
+        break;
+        
     case 'my-artworks':
     case 'add-artwork':
     case 'sales-report':
