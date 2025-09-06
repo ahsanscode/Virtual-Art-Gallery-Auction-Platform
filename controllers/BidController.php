@@ -156,5 +156,47 @@ class BidController {
         header("Location: index.php?action=my-artworks");
         exit;
     }
+
+    public function finalizeBid() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'artist') {
+            header("Location: index.php");
+            exit;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $artwork_id = $_POST['artwork_id'] ?? null;
+            
+            if ($artwork_id) {
+                $artwork = $this->artworkModel->findById($artwork_id);
+                
+                // Verify artist owns the artwork and it's in auction
+                if ($artwork && $artwork['artist_id'] == $_SESSION['user']['id'] && $artwork['status'] === 'in_auction') {
+                    $highest_bid = $this->bidModel->getHighestBid($artwork_id);
+                    $highest_bidder = $this->bidModel->getHighestBidder($artwork_id);
+                    
+                    // Only allow finalization if there's a bid greater than starting price
+                    if ($highest_bidder && $highest_bid > $artwork['starting_price']) {
+                        // Mark as sold to highest bidder
+                        $this->artworkModel->markAsSold($artwork_id, $highest_bidder['bidder_id'], $highest_bidder['bid_amount']);
+                        $_SESSION['bid_success'] = "Auction finalized successfully! Artwork sold to " . htmlspecialchars($highest_bidder['bidder_name']) . " for $" . number_format($highest_bid, 2);
+                    } else {
+                        $_SESSION['bid_error'] = "Cannot finalize auction. No bids above starting price.";
+                    }
+                } else {
+                    $_SESSION['bid_error'] = "Cannot finalize auction. Invalid artwork or permissions.";
+                }
+            }
+            
+            if ($artwork_id) {
+                header("Location: index.php?action=auction-details&id=" . $artwork_id);
+            } else {
+                header("Location: index.php?action=my-artworks");
+            }
+            exit;
+        }
+        
+        header("Location: index.php?action=my-artworks");
+        exit;
+    }
 }
 ?>

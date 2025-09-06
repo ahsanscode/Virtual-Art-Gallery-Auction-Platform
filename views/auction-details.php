@@ -181,6 +181,23 @@ include 'header.php';
         transform: none;
     }
     
+    .finalize-btn {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .finalize-btn:hover {
+        transform: translateY(-2px);
+    }
+    
     .bid-history {
         background: white;
         padding: 2rem;
@@ -352,6 +369,30 @@ include 'header.php';
                 <div style="text-align: center; padding: 1rem;">
                     <p>Please <a href="index.php?action=login">login</a> as a buyer to place bids.</p>
                 </div>
+            <?php elseif (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'artist' && $_SESSION['user']['id'] == $artwork['artist_id']): ?>
+                <?php
+                    // Check if there are bids greater than starting price
+                    $can_finalize = !empty($bids) && $current_bid > $artwork['starting_price'];
+                ?>
+                <?php if ($can_finalize): ?>
+                    <div style="text-align: center; padding: 1rem;">
+                        <p style="margin-bottom: 1rem; color: #28a745; font-weight: 500;">
+                            🎯 You can finalize this auction now!<br>
+                            <small>Current highest bid ($<?php echo number_format($current_bid, 2); ?>) is above your starting price ($<?php echo number_format($artwork['starting_price'], 2); ?>)</small>
+                        </p>
+                        
+                        <form method="post" action="index.php?action=finalize-bid" style="max-width: 300px; margin: 0 auto;">
+                            <input type="hidden" name="artwork_id" value="<?php echo $artwork['id']; ?>">
+                            <button type="submit" class="finalize-btn" onclick="return confirm('Are you sure you want to finalize this auction? This will sell the artwork to the highest bidder and cannot be undone.')">
+                                ✅ Finalize Auction
+                            </button>
+                        </form>
+                    </div>
+                <?php else: ?>
+                    <div style="text-align: center; padding: 1rem;">
+                        <p style="color: #666;">You are the artist of this artwork. <?php echo empty($bids) ? 'Waiting for bids.' : 'Waiting for bids above starting price to enable finalization.'; ?></p>
+                    </div>
+                <?php endif; ?>
             <?php elseif (isset($_SESSION['user']) && $_SESSION['user']['role'] !== 'buyer'): ?>
                 <div style="text-align: center; padding: 1rem;">
                     <p>Only buyers can place bids on artworks.</p>

@@ -99,6 +99,14 @@ switch ($action) {
         }
         break;
         
+    case 'finalize-bid':
+        if ($userRole === 'artist') {
+            $bid->finalizeBid();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
     case 'sales-report':
     case 'profile-settings':
         if ($userRole === 'artist') {
