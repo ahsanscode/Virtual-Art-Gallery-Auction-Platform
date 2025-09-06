@@ -27,6 +27,9 @@ if (!isset($_SESSION['user'])) {
     } elseif ($action === 'browse') {
         // Show browse page for guests
         $artwork->showBrowseArtworks();
+    } elseif ($action === 'all-artworks') {
+        // Show all artworks page for guests
+        $artwork->showAllArtworks();
     } elseif ($action === 'auctions') {
         // Show auctions page for guests  
         $bid->showAuctions();
@@ -113,6 +116,10 @@ switch ($action) {
         
     case 'browse':
         $artwork->showBrowseArtworks();
+        break;
+        
+    case 'all-artworks':
+        $artwork->showAllArtworks();
         break;
         
     case 'artwork-details':

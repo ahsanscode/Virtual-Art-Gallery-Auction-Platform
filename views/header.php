@@ -110,6 +110,7 @@
                         <li><a href="index.php?action=my-artworks">My Artworks</a></li>
                         <li><a href="index.php?action=add-artwork">Add Artwork</a></li>
                     <?php else: ?>
+                        <li><a href="index.php?action=all-artworks">All Artworks</a></li>
                         <li><a href="index.php?action=browse">Browse Art</a></li>
                         <li><a href="index.php?action=auctions">Auctions</a></li>
                         <li><a href="index.php?action=favorites">Favorites</a></li>
@@ -122,6 +123,7 @@
                     </li>
                 <?php else: ?>
                     <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php?action=all-artworks">All Artworks</a></li>
                     <li><a href="index.php?action=browse">Browse Art</a></li>
                     <li><a href="index.php?action=about">About</a></li>
                     <li><a href="index.php?action=contact">Contact</a></li>

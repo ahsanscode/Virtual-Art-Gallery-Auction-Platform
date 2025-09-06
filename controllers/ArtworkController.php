@@ -209,5 +209,31 @@ class ArtworkController {
         header("Location: index.php?action=my-artworks");
         exit;
     }
+
+    public function showAllArtworks() {
+        $search_term = $_GET['search'] ?? '';
+        $artworks = $this->artworkModel->findAllWithSearch($search_term);
+        
+        // Add bid information for auction artworks
+        require_once __DIR__ . '/../models/bid/Bid.php';
+        $bidModel = new Bid();
+        
+        foreach ($artworks as &$artwork) {
+            if ($artwork['status'] === 'in_auction') {
+                $artwork['highest_bid'] = $bidModel->getHighestBid($artwork['id']);
+                $artwork['bid_count'] = $bidModel->getBidCount($artwork['id']);
+                $artwork['current_bid'] = max($artwork['highest_bid'], $artwork['starting_price']);
+                
+                if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'buyer') {
+                    $artwork['user_has_bid'] = $bidModel->hasUserBid($artwork['id'], $_SESSION['user']['id']);
+                    if ($artwork['user_has_bid']) {
+                        $artwork['user_highest_bid'] = $bidModel->getUserHighestBid($artwork['id'], $_SESSION['user']['id']);
+                    }
+                }
+            }
+        }
+        
+        include __DIR__ . '/../views/all-artworks.php';
+    }
 }
 ?>
