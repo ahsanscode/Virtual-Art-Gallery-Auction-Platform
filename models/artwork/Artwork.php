@@ -114,5 +114,27 @@ class Artwork {
         $stmt->bindParam(":id", $id);
         return $stmt->execute();
     }
+
+    public function findAllWithSearch($search_term = '') {
+        $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
+                  LEFT JOIN users u ON a.artist_id = u.id 
+                  WHERE (a.status = 'available' OR a.status = 'in_auction')";
+        
+        if (!empty($search_term)) {
+            $query .= " AND a.title LIKE :search_term";
+        }
+        
+        $query .= " ORDER BY a.status DESC, a.created_at DESC";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        if (!empty($search_term)) {
+            $search_param = '%' . $search_term . '%';
+            $stmt->bindParam(":search_term", $search_param);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
