@@ -88,6 +88,15 @@ class ArtworkController {
         }
 
         $artworks = $this->artworkModel->findByArtist($_SESSION['user']['id']);
+        
+        // Add bid count information for each artwork
+        require_once __DIR__ . '/../models/bid/Bid.php';
+        $bidModel = new Bid();
+        
+        foreach ($artworks as &$artwork) {
+            $artwork['bid_count'] = $bidModel->getBidCount($artwork['id']);
+        }
+        
         include __DIR__ . '/../views/my-artworks.php';
     }
 

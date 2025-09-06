@@ -266,16 +266,16 @@
                                         </button>
                                     </form>
                                 <?php elseif ($artwork['status'] === 'in_auction'): ?>
-                                    <?php if (strtotime($artwork['auction_end_time']) <= time()): ?>
+                                    <?php if (($artwork['bid_count'] ?? 0) > 0): ?>
                                         <form method="post" action="index.php?action=end-auction" style="flex: 1;">
                                             <input type="hidden" name="artwork_id" value="<?php echo $artwork['id']; ?>">
-                                            <button type="submit" class="btn btn-end-auction">
-                                                🏁 End Auction
+                                            <button type="submit" class="btn btn-end-auction" onclick="return confirm('End auction and sell to highest bidder?')">
+                                                🏁 End Auction (<?php echo $artwork['bid_count']; ?> bid<?php echo $artwork['bid_count'] !== 1 ? 's' : ''; ?>)
                                             </button>
                                         </form>
                                     <?php else: ?>
                                         <span class="btn" style="background: #6c757d; color: white; cursor: default;">
-                                            ⏱️ Auction Active
+                                            ⏱️ Auction Active (No bids yet)
                                         </span>
                                     <?php endif; ?>
                                 <?php else: ?>

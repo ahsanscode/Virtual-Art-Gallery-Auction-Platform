@@ -354,7 +354,17 @@ include 'header.php';
                 </div>
             <?php elseif (isset($_SESSION['user']) && $_SESSION['user']['role'] !== 'buyer'): ?>
                 <div style="text-align: center; padding: 1rem;">
-                    <p>Only buyers can place bids on artworks.</p>
+                    <?php if ($_SESSION['user']['role'] === 'artist' && $artwork['artist_id'] == $_SESSION['user']['id'] && $bid_count > 0): ?>
+                        <p>You own this artwork. You can end the auction early:</p>
+                        <form method="post" action="index.php?action=end-auction" style="margin-top: 1rem;">
+                            <input type="hidden" name="artwork_id" value="<?php echo $artwork['id']; ?>">
+                            <button type="submit" class="bid-btn" style="background: #17a2b8;" onclick="return confirm('End auction and sell to highest bidder?')">
+                                🏁 End Auction (<?php echo $bid_count; ?> bid<?php echo $bid_count !== 1 ? 's' : ''; ?>)
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <p>Only buyers can place bids on artworks.</p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>
