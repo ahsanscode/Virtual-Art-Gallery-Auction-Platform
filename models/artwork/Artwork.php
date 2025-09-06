@@ -13,7 +13,7 @@ class Artwork {
     public function create($artist_id, $title, $description, $image_url, $starting_price) {
         $query = "INSERT INTO " . $this->table . " 
                   (artist_id, title, description, image_url, starting_price, auction_start_time, auction_end_time) 
-                  VALUES (:artist_id, :title, :description, :image_url, :starting_price, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY))";
+                  VALUES (:artist_id, :title, :description, :image_url, :starting_price, datetime('now'), datetime('now', '+7 days'))";
         
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":artist_id", $artist_id);
@@ -65,7 +65,7 @@ class Artwork {
     public function findInAuction() {
         $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
                   LEFT JOIN users u ON a.artist_id = u.id 
-                  WHERE a.status = 'in_auction' AND a.auction_end_time > NOW() 
+                  WHERE a.status = 'in_auction' AND a.auction_end_time > datetime('now') 
                   ORDER BY a.auction_end_time ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -108,7 +108,7 @@ class Artwork {
 
     public function startAuction($id) {
         $query = "UPDATE " . $this->table . " 
-                  SET status = 'in_auction', auction_start_time = NOW(), auction_end_time = DATE_ADD(NOW(), INTERVAL 7 DAY) 
+                  SET status = 'in_auction', auction_start_time = datetime('now'), auction_end_time = datetime('now', '+7 days') 
                   WHERE id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);

@@ -12,6 +12,9 @@ class Database {
             // For testing purposes, use SQLite
             if (file_exists(__DIR__ . '/../test_db.sqlite')) {
                 $this->conn = new PDO("sqlite:" . __DIR__ . "/../test_db.sqlite");
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // Enable foreign key support in SQLite
+                $this->conn->exec("PRAGMA foreign_keys = ON");
             } else {
                 // Fallback to MySQL if SQLite doesn't exist
                 $this->conn = new PDO(
@@ -19,12 +22,12 @@ class Database {
                     $this->username, 
                     $this->password
                 );
-            }
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            // Initialize missing tables only if we have a valid connection
-            if ($this->conn) {
-                $this->initializeTables();
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // Initialize missing tables only if we have a valid connection
+                if ($this->conn) {
+                    $this->initializeTables();
+                }
             }
         } catch(PDOException $exception) {
             // Log the error but don't crash the application
@@ -37,13 +40,21 @@ class Database {
     private function initializeTables() {
         try {
             // Check if bids table exists and create it if not
-            $result = $this->conn->query("SHOW TABLES LIKE 'bids'");
+            // For SQLite, check differently
+            $result = $this->conn->query("SELECT name FROM sqlite_master WHERE type='table' AND name='bids'");
             if ($result->rowCount() == 0) {
                 $this->createBidsTable();
             }
         } catch(PDOException $exception) {
-            // Silently fail if we can't check/create tables
-            // This ensures the application doesn't crash
+            // For MySQL, try the original approach
+            try {
+                $result = $this->conn->query("SHOW TABLES LIKE 'bids'");
+                if ($result->rowCount() == 0) {
+                    $this->createBidsTable();
+                }
+            } catch(PDOException $e) {
+                // Silently fail if we can't check/create tables
+            }
         }
     }
 
