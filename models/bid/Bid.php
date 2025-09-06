@@ -12,6 +12,9 @@ class Bid {
 
     public function create($artwork_id, $bidder_id, $bid_amount) {
         try {
+            if (!$this->conn) {
+                return false;
+            }
             $query = "INSERT INTO " . $this->table . " (artwork_id, bidder_id, bid_amount) 
                       VALUES (:artwork_id, :bidder_id, :bid_amount)";
             $stmt = $this->conn->prepare($query);
@@ -27,6 +30,9 @@ class Bid {
 
     public function findByArtwork($artwork_id) {
         try {
+            if (!$this->conn) {
+                return [];
+            }
             $query = "SELECT b.*, u.name as bidder_name FROM " . $this->table . " b 
                       LEFT JOIN users u ON b.bidder_id = u.id 
                       WHERE b.artwork_id = :artwork_id 
@@ -43,6 +49,9 @@ class Bid {
 
     public function findByBidder($bidder_id) {
         try {
+            if (!$this->conn) {
+                return [];
+            }
             $query = "SELECT b.*, a.title as artwork_title, a.image_url, u.name as artist_name 
                       FROM " . $this->table . " b 
                       LEFT JOIN artworks a ON b.artwork_id = a.id 
@@ -61,6 +70,9 @@ class Bid {
 
     public function getHighestBid($artwork_id) {
         try {
+            if (!$this->conn) {
+                return 0;
+            }
             $query = "SELECT MAX(bid_amount) as highest_bid FROM " . $this->table . " 
                       WHERE artwork_id = :artwork_id";
             $stmt = $this->conn->prepare($query);
@@ -76,6 +88,9 @@ class Bid {
 
     public function getHighestBidder($artwork_id) {
         try {
+            if (!$this->conn) {
+                return false;
+            }
             $query = "SELECT b.*, u.name as bidder_name FROM " . $this->table . " b 
                       LEFT JOIN users u ON b.bidder_id = u.id 
                       WHERE b.artwork_id = :artwork_id 
@@ -93,6 +108,9 @@ class Bid {
 
     public function getBidCount($artwork_id) {
         try {
+            if (!$this->conn) {
+                return 0;
+            }
             $query = "SELECT COUNT(*) as bid_count FROM " . $this->table . " 
                       WHERE artwork_id = :artwork_id";
             $stmt = $this->conn->prepare($query);
@@ -108,6 +126,9 @@ class Bid {
 
     public function hasUserBid($artwork_id, $bidder_id) {
         try {
+            if (!$this->conn) {
+                return false;
+            }
             $query = "SELECT COUNT(*) as count FROM " . $this->table . " 
                       WHERE artwork_id = :artwork_id AND bidder_id = :bidder_id";
             $stmt = $this->conn->prepare($query);
@@ -124,6 +145,9 @@ class Bid {
 
     public function getUserHighestBid($artwork_id, $bidder_id) {
         try {
+            if (!$this->conn) {
+                return 0;
+            }
             $query = "SELECT MAX(bid_amount) as highest_bid FROM " . $this->table . " 
                       WHERE artwork_id = :artwork_id AND bidder_id = :bidder_id";
             $stmt = $this->conn->prepare($query);

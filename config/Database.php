@@ -22,10 +22,14 @@ class Database {
             }
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            // Initialize missing tables
-            $this->initializeTables();
+            // Initialize missing tables only if we have a valid connection
+            if ($this->conn) {
+                $this->initializeTables();
+            }
         } catch(PDOException $exception) {
-            echo "Connection error: " . $exception->getMessage();
+            // Log the error but don't crash the application
+            error_log("Database connection error: " . $exception->getMessage());
+            $this->conn = null;
         }
         return $this->conn;
     }
