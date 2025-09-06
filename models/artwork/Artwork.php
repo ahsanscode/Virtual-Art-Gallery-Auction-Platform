@@ -14,14 +14,14 @@ class Artwork {
         $query = "INSERT INTO " . $this->table . " 
                   (artist_id, title, description, image_url, starting_price, auction_start_time, auction_end_time) 
                   VALUES (:artist_id, :title, :description, :image_url, :starting_price, NOW(), DATE_ADD(NOW(), INTERVAL 7 DAY))";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":artist_id", $artist_id);
         $stmt->bindParam(":title", $title);
         $stmt->bindParam(":description", $description);
         $stmt->bindParam(":image_url", $image_url);
         $stmt->bindParam(":starting_price", $starting_price);
-        
+
         return $stmt->execute();
     }
 
@@ -122,24 +122,6 @@ class Artwork {
                   ORDER BY a.updated_at DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":buyer_id", $buyer_id);
-    public function findAllWithSearch($search_term = '') {
-        $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
-                  LEFT JOIN users u ON a.artist_id = u.id 
-                  WHERE (a.status = 'available' OR a.status = 'in_auction')";
-        
-        if (!empty($search_term)) {
-            $query .= " AND a.title LIKE :search_term";
-        }
-        
-        $query .= " ORDER BY a.status DESC, a.created_at DESC";
-        
-        $stmt = $this->conn->prepare($query);
-        
-        if (!empty($search_term)) {
-            $search_param = '%' . $search_term . '%';
-            $stmt->bindParam(":search_term", $search_param);
-        }
-        
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
