@@ -11,7 +11,7 @@ class User {
     }
 
     public function findByEmail($email) {
-        $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
+        $query = "SELECT * FROM " . $this->table . " WHERE email = :email AND is_deleted = 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":email", $email);
         $stmt->execute();
@@ -46,7 +46,7 @@ class User {
     }
 
     public function findById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
+        $query = "SELECT * FROM " . $this->table . " WHERE id = :id AND is_deleted = 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
@@ -96,6 +96,21 @@ class User {
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":name", $name);
         }
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function softDelete($id) {
+        $query = "UPDATE " . $this->table . " SET is_deleted = 1 WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+        return $stmt->execute();
+    }
+
+    public function findByEmailIncludingDeleted($email) {
+        $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

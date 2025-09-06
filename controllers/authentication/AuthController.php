@@ -10,9 +10,16 @@ class AuthController
             $password = $_POST['password'];
 
             $userModel = new User();
-            $user = $userModel->findByEmail($email);
+            $user = $userModel->findByEmailIncludingDeleted($email);
 
             if ($user && password_verify($password, $user['password'])) {
+                // Check if user is soft deleted
+                if ($user['is_deleted'] == 1) {
+                    $error = "The profile was deleted contact authority";
+                    include __DIR__ . '/../../views/authentication/login.php';
+                    return;
+                }
+                
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'username' => $user['name'], // Display name in header
