@@ -52,6 +52,24 @@ class Artwork {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function findAllWithSearch($search_term = '') {
+        if (empty($search_term)) {
+            // If no search term, return all artworks
+            return $this->findAll();
+        }
+        
+        // Search in title with case-insensitive matching
+        $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
+                  LEFT JOIN users u ON a.artist_id = u.id 
+                  WHERE LOWER(a.title) LIKE LOWER(:search_term)
+                  ORDER BY a.created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $search_param = '%' . $search_term . '%';
+        $stmt->bindParam(":search_term", $search_param);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function findAvailable() {
         $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
                   LEFT JOIN users u ON a.artist_id = u.id 
