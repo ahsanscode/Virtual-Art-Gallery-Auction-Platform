@@ -4,10 +4,14 @@ session_start();
 // Use proper authentication controller
 require_once __DIR__ . '/controllers/authentication/AuthController.php';
 require_once __DIR__ . '/controllers/ProfileController.php';
+require_once __DIR__ . '/controllers/ArtworkController.php';
+require_once __DIR__ . '/controllers/BidController.php';
 
 $action = $_GET['action'] ?? null;
 $auth = new AuthController();
 $profile = new ProfileController();
+$artwork = new ArtworkController();
+$bid = new BidController();
 
 if ($action === 'logout') {
     $auth->logout();
@@ -21,8 +25,11 @@ if (!isset($_SESSION['user'])) {
     } elseif ($action === 'login') {
         $auth->login();
     } elseif ($action === 'browse') {
-        // Show browse page for guests (could be implemented later)
-        include __DIR__ . '/views/home.php';
+        // Show browse page for guests
+        $artwork->showBrowseArtworks();
+    } elseif ($action === 'auctions') {
+        // Show auctions page for guests  
+        $bid->showAuctions();
     } elseif ($action === 'about') {
         // Show about page (could be implemented later)
         include __DIR__ . '/views/home.php';
@@ -53,7 +60,45 @@ switch ($action) {
         break;
         
     case 'my-artworks':
+        if ($userRole === 'artist') {
+            $artwork->showMyArtworks();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
     case 'add-artwork':
+        if ($userRole === 'artist') {
+            $artwork->addArtwork();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
+    case 'start-auction':
+        if ($userRole === 'artist') {
+            $artwork->startAuction();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
+    case 'delete-artwork':
+        if ($userRole === 'artist') {
+            $artwork->deleteArtwork();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
+    case 'end-auction':
+        if ($userRole === 'artist') {
+            $bid->endAuction();
+        } else {
+            include __DIR__ . '/views/buyer-dashboard.php';
+        }
+        break;
+        
     case 'sales-report':
     case 'profile-settings':
         if ($userRole === 'artist') {
@@ -67,7 +112,53 @@ switch ($action) {
         break;
         
     case 'browse':
+        $artwork->showBrowseArtworks();
+        break;
+        
+    case 'artwork-details':
+        $artwork->showArtworkDetails();
+        break;
+        
+    case 'buy-artwork':
+        if ($userRole === 'buyer') {
+            $artwork->buyArtwork();
+        } else {
+            include __DIR__ . '/views/artist-dashboard.php';
+        }
+        break;
+        
+    case 'purchase-success':
+        if ($userRole === 'buyer') {
+            $artwork->showPurchaseSuccess();
+        } else {
+            include __DIR__ . '/views/artist-dashboard.php';
+        }
+        break;
+        
     case 'auctions':
+        $bid->showAuctions();
+        break;
+        
+    case 'auction-details':
+        $bid->showAuctionDetails();
+        break;
+        
+    case 'place-bid':
+        if ($userRole === 'buyer') {
+            $bid->placeBid();
+        } else {
+            include __DIR__ . '/views/artist-dashboard.php';
+        }
+        break;
+        
+    case 'my-bids':
+        if ($userRole === 'buyer') {
+            $bid->showMyBids();
+        } else {
+            include __DIR__ . '/views/artist-dashboard.php';
+        }
+        break;
+        
     case 'favorites':
     case 'purchase-history':
         if ($userRole === 'buyer') {
