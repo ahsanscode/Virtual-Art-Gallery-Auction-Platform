@@ -47,6 +47,20 @@ CREATE TABLE `artworks` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bids`
+--
+
+CREATE TABLE `bids` (
+  `id` int(11) NOT NULL,
+  `artwork_id` int(11) NOT NULL,
+  `bidder_id` int(11) NOT NULL,
+  `bid_amount` decimal(10,2) NOT NULL,
+  `bid_time` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -85,6 +99,14 @@ ALTER TABLE `artworks`
   ADD KEY `buyer_id` (`buyer_id`);
 
 --
+-- Indexes for table `bids`
+--
+ALTER TABLE `bids`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `artwork_id` (`artwork_id`),
+  ADD KEY `bidder_id` (`bidder_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -99,6 +121,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `artworks`
 --
 ALTER TABLE `artworks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bids`
+--
+ALTER TABLE `bids`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -117,6 +145,13 @@ ALTER TABLE `users`
 ALTER TABLE `artworks`
   ADD CONSTRAINT `artworks_ibfk_1` FOREIGN KEY (`artist_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `artworks_ibfk_2` FOREIGN KEY (`buyer_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `bids`
+--
+ALTER TABLE `bids`
+  ADD CONSTRAINT `bids_ibfk_1` FOREIGN KEY (`artwork_id`) REFERENCES `artworks` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `bids_ibfk_2` FOREIGN KEY (`bidder_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
