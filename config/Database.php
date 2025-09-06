@@ -36,14 +36,43 @@ class Database {
 
     private function initializeTables() {
         try {
-            // Check if bids table exists and create it if not
-            $result = $this->conn->query("SHOW TABLES LIKE 'bids'");
-            if ($result->rowCount() == 0) {
-                $this->createBidsTable();
+            // Check if we're using SQLite or MySQL
+            $driver = $this->conn->getAttribute(PDO::ATTR_DRIVER_NAME);
+            
+            if ($driver === 'sqlite') {
+                // For SQLite, check if bids table exists
+                $result = $this->conn->query("SELECT name FROM sqlite_master WHERE type='table' AND name='bids'");
+                if ($result->rowCount() == 0) {
+                    $this->createBidsTableSQLite();
+                }
+            } else {
+                // For MySQL, use SHOW TABLES
+                $result = $this->conn->query("SHOW TABLES LIKE 'bids'");
+                if ($result->rowCount() == 0) {
+                    $this->createBidsTable();
+                }
             }
         } catch(PDOException $exception) {
             // Silently fail if we can't check/create tables
             // This ensures the application doesn't crash
+        }
+    }
+
+    private function createBidsTableSQLite() {
+        try {
+            $sql = "CREATE TABLE IF NOT EXISTS bids (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                artwork_id INTEGER NOT NULL,
+                bidder_id INTEGER NOT NULL,
+                bid_amount DECIMAL(10,2) NOT NULL,
+                bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (artwork_id) REFERENCES artworks(id) ON DELETE CASCADE,
+                FOREIGN KEY (bidder_id) REFERENCES users(id)
+            )";
+            
+            $this->conn->exec($sql);
+        } catch(PDOException $exception) {
+            // Silently fail if we can't create the table
         }
     }
 

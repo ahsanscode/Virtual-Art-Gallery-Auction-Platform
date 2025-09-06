@@ -125,6 +125,16 @@ class BidController {
         include __DIR__ . '/../views/my-bids.php';
     }
 
+    public function showPurchaseHistory() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'buyer') {
+            header("Location: index.php");
+            exit;
+        }
+
+        $purchases = $this->artworkModel->findByBuyer($_SESSION['user']['id']);
+        include __DIR__ . '/../views/purchase-history.php';
+    }
+
     public function endAuction() {
         // This would be called by a cron job or scheduled task
         // For now, we'll manually handle auction ending

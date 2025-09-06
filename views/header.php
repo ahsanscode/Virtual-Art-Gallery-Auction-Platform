@@ -114,6 +114,7 @@
                         <li><a href="index.php?action=browse">Browse Art</a></li>
                         <li><a href="index.php?action=auctions">Auctions</a></li>
                         <li><a href="index.php?action=favorites">Favorites</a></li>
+                        <li><a href="index.php?action=purchase-history">Purchase History</a></li>
                     <?php endif; ?>
                     <li><a href="index.php?action=profile">Profile</a></li>
                     <li class="user-info">
