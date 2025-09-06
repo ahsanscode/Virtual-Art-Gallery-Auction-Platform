@@ -162,9 +162,13 @@ switch ($action) {
     case 'favorites':
     case 'purchase-history':
         if ($userRole === 'buyer') {
-            // For now, redirect to buyer dashboard
-            // These could be implemented as separate pages later
-            include __DIR__ . '/views/buyer-dashboard.php';
+            if ($action === 'purchase-history') {
+                $bid->showPurchaseHistory();
+            } else {
+                // For now, redirect to buyer dashboard  
+                // favorites could be implemented as separate pages later
+                include __DIR__ . '/views/buyer-dashboard.php';
+            }
         } else {
             // Redirect artists to their dashboard
             include __DIR__ . '/views/artist-dashboard.php';

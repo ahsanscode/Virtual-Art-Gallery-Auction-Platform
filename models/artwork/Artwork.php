@@ -114,5 +114,16 @@ class Artwork {
         $stmt->bindParam(":id", $id);
         return $stmt->execute();
     }
+
+    public function findByBuyer($buyer_id) {
+        $query = "SELECT a.*, u.name as artist_name FROM " . $this->table . " a 
+                  LEFT JOIN users u ON a.artist_id = u.id 
+                  WHERE a.buyer_id = :buyer_id AND a.status = 'sold'
+                  ORDER BY a.updated_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":buyer_id", $buyer_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
