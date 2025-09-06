@@ -271,6 +271,10 @@
                     <span class="action-icon">🔍</span>
                     Browse Art
                 </a>
+                <a href="index.php?action=my-bids" class="action-btn">
+                    <span class="action-icon">💰</span>
+                    My Bids
+                </a>
                 <a href="index.php?action=auctions" class="action-btn">
                     <span class="action-icon">🏆</span>
                     Live Auctions
